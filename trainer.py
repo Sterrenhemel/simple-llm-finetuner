@@ -50,6 +50,8 @@ class Trainer():
         if (self.model is not None):
             self.unload_model()
 
+        print(model_name)
+
         self.model = transformers.AutoModelForCausalLM.from_pretrained(
             model_name,
             device_map=DEVICE_MAP,
