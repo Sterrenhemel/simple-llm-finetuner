@@ -12,7 +12,10 @@ parser.add_argument('--models',
         'decapoda-research/llama-7b-hf', 
         'cerebras/Cerebras-GPT-2.7B', 
         'cerebras/Cerebras-GPT-1.3B', 
-        'EleutherAI/gpt-neo-2.7B'
+        'EleutherAI/gpt-neo-2.7B',
+        "P01son/Linly-Chinese-LLaMA-7b-hf",
+        "openlmlab/open-chinese-llama-7b-patch",
+        "minlik/chinese-llama-plus-7b-merged"
     ],  
     help='List of models to use'
 )
