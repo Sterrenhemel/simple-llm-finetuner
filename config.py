@@ -15,7 +15,11 @@ parser.add_argument('--models',
         'EleutherAI/gpt-neo-2.7B',
         "P01son/Linly-Chinese-LLaMA-7b-hf",
         "openlmlab/open-chinese-llama-7b-patch",
-        "minlik/chinese-llama-plus-7b-merged"
+        "minlik/chinese-llama-plus-7b-merged",
+        "RWKV/rwkv-4-1b5-pile",
+        "RWKV/rwkv-raven-1b5",
+        "RWKV/rwkv-raven-3b",
+        "RWKV/rwkv-raven-7b"
     ],  
     help='List of models to use'
 )
