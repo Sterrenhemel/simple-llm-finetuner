@@ -86,13 +86,11 @@ class UI():
         self.model_name = gr.Dropdown(label='Base Model', choices=MODELS)
 
     def training_data_block(self):
-        raw_text_file = gr.Dropdown(choices=utils.get_datasets('training/datasets', 'txt'), value='None',
-                                    label='Text file', info='The raw text file to use for training.')
-        # training_text = gr.TextArea(
-        #     lines=20,
-        #     label="Training Data",
-        #     info='Paste training data text here. Sequences must be separated with 2 blank lines'
-        # )
+        training_text = gr.TextArea(
+            lines=20,
+            label="Training Hf Data",
+            info='Paste training data text here. Sequences must be separated with 2 blank lines'
+        )
         
         # examples_dir = os.path.join(os.getcwd(), 'example-datasets')
         #
@@ -105,7 +103,7 @@ class UI():
         #
         # gr.Examples("./example-datasets", inputs=example_filename)
 
-        self.training_txt_file = raw_text_file
+        self.training_hf_path = training_text.strip()
         # self.training_text = training_text
 
     def training_launch_block(self):
@@ -117,7 +115,7 @@ class UI():
                 abort_button = gr.Button('Abort')
 
         def train(
-            training_txt_file,
+            training_hf_path,
             new_lora_name, 
             max_seq_length, 
             micro_batch_size, 
@@ -131,11 +129,8 @@ class UI():
         ):
             self.trainer.unload_lora()
 
-            with open(utils.clean_path('training/datasets', f'{training_txt_file}.txt'), 'r', encoding='utf-8') as file:
-                training_text = file.read()
-
             self.trainer.train(
-                training_text, 
+                training_hf_path,
                 new_lora_name, 
                 max_seq_length=max_seq_length,
                 micro_batch_size=micro_batch_size,
@@ -152,7 +147,7 @@ class UI():
         train_event = train_button.click(
             fn=train,
             inputs=[
-                self.training_txt_file,
+                self.training_hf_path,
                 self.new_lora_name,
                 self.max_seq_length, 
                 self.micro_batch_size, 

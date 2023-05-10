@@ -164,15 +164,17 @@ class Trainer():
         
         return result
 
-    def tokenize_training_text(self, training_text, max_seq_length, separator="\n\n\n", **kwargs):
-        samples = training_text.split(separator)
-        samples = [x.strip() for x in samples]
-        def to_dict(text):
-            return { 'text': text }
+    def tokenize_training_text(self, training_hf_path, max_seq_length, separator="\n\n\n", **kwargs):
+        # samples = training_text.split(separator)
+        # samples = [x.strip() for x in samples]
+        # def to_dict(text):
+        #     return { 'text': text }
+        #
+        # samples = [to_dict(x) for x in samples]
+        #
+        # from datasets import load_dataset
 
-        samples = [to_dict(x) for x in samples]
-
-        training_dataset = datasets.Dataset.from_list(samples)
+        training_dataset = load_dataset(training_hf_path)
         training_dataset = training_dataset.shuffle().map(
             lambda x: self.tokenize_sample(x, max_seq_length), 
             batched=False
@@ -180,7 +182,7 @@ class Trainer():
 
         return training_dataset
 
-    def train(self, training_text=None, new_peft_model_name=None, **kwargs):
+    def train(self, training_hf_path=None, new_peft_model_name=None, **kwargs):
         assert self.should_abort is False
         assert self.model is not None
         assert self.model_name is not None
@@ -191,7 +193,7 @@ class Trainer():
         self.lora_name = None
         self.loras = {}
 
-        train_dataset = self.tokenize_training_text(training_text, **kwargs)
+        train_dataset = self.tokenize_training_text(training_hf_path, **kwargs)
 
         if hasattr(self.model, 'disable_adapter'):
             self.load_model(self.model_name, force=True)
