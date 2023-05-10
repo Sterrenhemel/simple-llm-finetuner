@@ -350,8 +350,12 @@ class UI():
     
     def run(self):
         self.ui = self.layout()
-        self.ui.queue().launch(show_error=True, share=SHARE, server_name=SERVER_HOST, server_port=SERVER_PORT)
-                   
+        try:
+            self.ui.queue().launch(show_error=True, share=SHARE, server_name=SERVER_HOST, server_port=SERVER_PORT)
+        except KeyboardInterrupt:
+            demo.close()
+        except Exception as e:
+            print(e)
 if (__name__ == '__main__'):
     ui = UI()
     ui.run()
