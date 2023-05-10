@@ -91,6 +91,11 @@ class UI():
             label="Training Hf Data",
             info='Paste training data text here. Sequences must be separated with 2 blank lines'
         )
+        text_field = gr.TextArea(
+            lines=20,
+            label="Data Field",
+            info='Paste training data text here. Sequences must be separated with 2 blank lines'
+        )
         
         # examples_dir = os.path.join(os.getcwd(), 'example-datasets')
         #
@@ -104,6 +109,7 @@ class UI():
         # gr.Examples("./example-datasets", inputs=example_filename)
 
         self.training_hf_path = training_text.strip()
+        self.text_field = text_field.strip()
         # self.training_text = training_text
 
     def training_launch_block(self):
@@ -116,6 +122,7 @@ class UI():
 
         def train(
             training_hf_path,
+            text_field,
             new_lora_name, 
             max_seq_length, 
             micro_batch_size, 
@@ -131,6 +138,7 @@ class UI():
 
             self.trainer.train(
                 training_hf_path,
+                text_field,
                 new_lora_name, 
                 max_seq_length=max_seq_length,
                 micro_batch_size=micro_batch_size,
@@ -148,6 +156,7 @@ class UI():
             fn=train,
             inputs=[
                 self.training_hf_path,
+                self.text_field,
                 self.new_lora_name,
                 self.max_seq_length, 
                 self.micro_batch_size, 
