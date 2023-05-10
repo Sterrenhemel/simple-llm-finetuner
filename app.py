@@ -86,24 +86,27 @@ class UI():
         self.model_name = gr.Dropdown(label='Base Model', choices=MODELS)
 
     def training_data_block(self):
-        training_text = gr.TextArea(
-            lines=20, 
-            label="Training Data", 
-            info='Paste training data text here. Sequences must be separated with 2 blank lines'
-        )
+        raw_text_file = gr.Dropdown(choices=utils.get_datasets('training/datasets', 'txt'), value='None',
+                                    label='Text file', info='The raw text file to use for training.')
+        # training_text = gr.TextArea(
+        #     lines=20,
+        #     label="Training Data",
+        #     info='Paste training data text here. Sequences must be separated with 2 blank lines'
+        # )
         
-        examples_dir = os.path.join(os.getcwd(), 'example-datasets')
+        # examples_dir = os.path.join(os.getcwd(), 'example-datasets')
+        #
+        # def load_example(filename):
+        #     with open(os.path.join(examples_dir, filename) , 'r', encoding='utf-8') as f:
+        #         return f.read()
+        #
+        # example_filename = gr.Textbox(visible=False)
+        # example_filename.change(fn=load_example, inputs=example_filename, outputs=training_text)
+        #
+        # gr.Examples("./example-datasets", inputs=example_filename)
 
-        def load_example(filename):
-            with open(os.path.join(examples_dir, filename) , 'r', encoding='utf-8') as f:
-                return f.read()
-            
-        example_filename = gr.Textbox(visible=False)
-        example_filename.change(fn=load_example, inputs=example_filename, outputs=training_text)
-        
-        gr.Examples("./example-datasets", inputs=example_filename)
-
-        self.training_text = training_text
+        self.training_txt_file = raw_text_file
+        # self.training_text = training_text
 
     def training_launch_block(self):
         with gr.Row():
@@ -114,7 +117,7 @@ class UI():
                 abort_button = gr.Button('Abort')
 
         def train(
-            training_text, 
+            training_txt_file,
             new_lora_name, 
             max_seq_length, 
             micro_batch_size, 
@@ -127,6 +130,9 @@ class UI():
             progress=gr.Progress(track_tqdm=True)
         ):
             self.trainer.unload_lora()
+
+            with open(clean_path('training/datasets', f'{training_txt_file}.txt'), 'r', encoding='utf-8') as file:
+                training_text = file.read()
 
             self.trainer.train(
                 training_text, 
@@ -146,7 +152,7 @@ class UI():
         train_event = train_button.click(
             fn=train,
             inputs=[
-                self.training_text,
+                self.training_txt_file,
                 self.new_lora_name,
                 self.max_seq_length, 
                 self.micro_batch_size, 
