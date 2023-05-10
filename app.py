@@ -131,7 +131,7 @@ class UI():
         ):
             self.trainer.unload_lora()
 
-            with open(clean_path('training/datasets', f'{training_txt_file}.txt'), 'r', encoding='utf-8') as file:
+            with open(utils.clean_path('training/datasets', f'{training_txt_file}.txt'), 'r', encoding='utf-8') as file:
                 training_text = file.read()
 
             self.trainer.train(
