@@ -3,7 +3,7 @@ from config import SHARE, MODELS, TRAINING_PARAMS, LORA_TRAINING_PARAMS, GENERAT
 import os
 import gradio as gr
 import random
-
+import utils
 from trainer import Trainer
 
 LORA_DIR = 'lora'
